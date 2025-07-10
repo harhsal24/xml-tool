@@ -18,11 +18,21 @@ function escapeXml(unsafe) {
 
 /**
  * Creates a single <common> XML block based on the two parts of an input line.
- * @param {string} aciValue The string before the ':', e.g., "PROD\ITEM_2\CHARGE_TAX_1.1"
+ * Includes a special case for 'true'/'false' values.
+ * @param {string} aciValue The string before the ':', e.g., "PROD\ITEM_2\CHARGE_TAX_1.1" or "true"
  * @param {string} uadXpath The string after the ':', e.g., "/INVOICE_DOCUMENT/..."
  * @returns {string} The formatted <common> XML block as a string.
  */
 function createCommonBlock(aciValue, uadXpath) {
+    // --- NEW LOGIC: Handle the special 'true'/'false' case ---
+    if (aciValue === 'true' || aciValue === 'false') {
+        // If the value is 'true' or 'false', return the simplified block.
+        return `  <common>
+    <UAD_Xpath>${escapeXml(uadXpath)}</UAD_Xpath>
+  </common>`;
+    }
+
+    // --- EXISTING LOGIC: Runs for all other lines ---
     const uadXpathTag = uadXpath;
     const aciTag = aciValue;
 
@@ -30,11 +40,7 @@ function createCommonBlock(aciValue, uadXpath) {
     const aciTagName = aciParts[aciParts.length - 1];
     
     const pathParts = aciParts.slice(0, -1);
-
-    // --- THIS IS THE CORRECTED LINE ---
-    // A leading backslash is now prepended to the path.
     const aciTagPath = `\\${pathParts.join('\\')}\\`;
-
     const aciTagIsCheckbox = 'false';
 
     return `  <common>
