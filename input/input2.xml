@@ -1,0 +1,45 @@
+<!-- mapping-value-test.xml -->
+<!-- An XML file where the text of the leaf nodes is a mapping key -->
+<URAR_FORM>
+
+  <!-- Section to test basic path generation -->
+  <SUBJECT id="S123">
+    <ADDRESS>
+      <STREET>URAR\SUBJECT\ADDRESS\STREET.1</STREET>
+      <CITY>URAR\SUBJECT\ADDRESS\CITY.1</CITY>
+      <STATE>URAR\SUBJECT\ADDRESS\STATE.1</STATE>
+    </ADDRESS>
+  </SUBJECT>
+
+  <!-- 
+    Section to test:
+    1. Sibling indexing (the second SALE will be SALE[2])
+    2. An exception tag (if you set SALE_GROUP as an exception)
+  -->
+  <SALES_HISTORY>
+    <SALE_GROUP type="prior">
+      <SALE_DATE>HISTORY\SALE_1\DATE.1</SALE_DATE>
+      <SALE_PRICE>HISTORY\SALE_1\PRICE.1</SALE_PRICE>
+    </SALE_GROUP>
+
+    <SALE_GROUP type="listing">
+      <LIST_DATE>HISTORY\LISTING\DATE.1</LIST_DATE>
+      <LIST_PRICE>HISTORY\LISTING\PRICE.1</LIST_PRICE>
+      <!-- A duplicate tag to test basic indexing -->
+      <NOTE>HISTORY\LISTING\NOTE_PRIMARY.1</NOTE>
+      <NOTE>HISTORY\LISTING\NOTE_SECONDARY.1</NOTE>
+    </SALE_GROUP>
+  </SALES_HISTORY>
+  
+  <!--
+    Section to test attribute-based indexing.
+    The path for the second FEATURE[@type="exterior"] should have an index [2].
+  -->
+  <IMPROVEMENTS>
+    <FEATURE type="interior">IMPROVEMENTS\FEATURE\INTERIOR_1.1</FEATURE>
+    <FEATURE type="exterior">IMPROVEMENTS\FEATURE\EXTERIOR_1.1</FEATURE>
+    <FEATURE type="interior">IMPROVEMENTS\FEATURE\INTERIOR_2.1</FEATURE>
+    <FEATURE type="exterior">IMPROVEMENTS\FEATURE\EXTERIOR_2.1</FEATURE>
+  </IMPROVEMENTS>
+
+</URAR_FORM>
