@@ -1,0 +1,48 @@
+<!-- invoice-test.xml -->
+<!-- A new test file with an "Invoice" theme to validate the parser. -->
+<INVOICE_DOCUMENT>
+
+  <!-- This tests basic attribute inclusion ('doc_id') -->
+  <HEADER doc_id="INV-2024-001">
+    <BILL_TO>
+      <NAME>Global Tech Inc.</NAME>
+      <CONTACT_PERSON>CONTACT\BILL_TO\PERSON.1</CONTACT_PERSON>
+    </BILL_TO>
+    <BILL_FROM>
+      <NAME>ACME Solutions</NAME>
+      <EMAIL>CONTACT\BILL_FROM\EMAIL.1</EMAIL>
+    </BILL_FROM>
+  </HEADER>
+
+  <!--
+    This section is the core test area.
+    Use "ITEM" for the 'exceptions' rule to always show index [1].
+  -->
+  <LINE_ITEMS>
+    <ITEM>
+      <PRODUCT_CODE>PROD\ITEM_1\CODE.1</PRODUCT_CODE>
+      <DESCRIPTION>PROD\ITEM_1\DESC.1</DESCRIPTION>
+      <!-- This tests attribute-based indexing. -->
+      <CHARGE type="base_price">PROD\ITEM_1\CHARGE_BASE.1</CHARGE>
+      <CHARGE type="tax">PROD\ITEM_1\CHARGE_TAX.1</CHARGE>
+    </ITEM>
+
+    <ITEM>
+      <PRODUCT_CODE>PROD\ITEM_2\CODE.1</PRODUCT_CODE>
+      <DESCRIPTION>PROD\ITEM_2\DESC.1</DESCRIPTION>
+      <!-- Test that attribute indexing resets under a new parent -->
+      <CHARGE type="base_price">PROD\ITEM_2\CHARGE_BASE.1</CHARGE>
+      <!-- Critical test: A second CHARGE of the same type under the same parent -->
+      <CHARGE type="tax">PROD\ITEM_2\CHARGE_TAX_1.1</CHARGE>
+      <CHARGE type="tax">PROD\ITEM_2\CHARGE_TAX_2.1</CHARGE>
+      <CHARGE type="discount">PROD\ITEM_2\CHARGE_DISCOUNT.1</CHARGE>
+    </ITEM>
+  </LINE_ITEMS>
+
+  <!-- A simple section to ensure pathing continues correctly -->
+  <TOTALS>
+    <SUBTOTAL>TOTALS\SUBTOTAL.1</SUBTOTAL>
+    <GRAND_TOTAL>TOTALS\GRAND_TOTAL.1</GRAND_TOTAL>
+  </TOTALS>
+
+</INVOICE_DOCUMENT>

@@ -1,93 +1,114 @@
 <MappingData>
   <common>
-    <ACI_TagPath>\URAR_FORM\SUBJECT\ADDRESS\</ACI_TagPath>
-    <ACI_TagName>STREET.1</ACI_TagName>
-    <ACI_Tag>URAR_FORM\SUBJECT\ADDRESS\STREET.1</ACI_Tag>
+    <ACI_TagPath>\</ACI_TagPath>
+    <ACI_TagName>Global Tech Inc.</ACI_TagName>
+    <ACI_Tag>Global Tech Inc.</ACI_Tag>
     <ACI_TagIsCheckbox>false</ACI_TagIsCheckbox>
-    <UAD_Xpath>/URAR_FORM/SUBJECT/ADDRESS/STREET</UAD_Xpath>
+    <UAD_Xpath>/INVOICE_DOCUMENT/HEADER/BILL_TO/NAME</UAD_Xpath>
   </common>
   <common>
-    <ACI_TagPath>\URAR_FORM\SUBJECT\ADDRESS\</ACI_TagPath>
-    <ACI_TagName>CITY.1</ACI_TagName>
-    <ACI_Tag>URAR_FORM\SUBJECT\ADDRESS\CITY.1</ACI_Tag>
+    <ACI_TagPath>CONTACT\BILL_TO\</ACI_TagPath>
+    <ACI_TagName>PERSON.1</ACI_TagName>
+    <ACI_Tag>CONTACT\BILL_TO\PERSON.1</ACI_Tag>
     <ACI_TagIsCheckbox>false</ACI_TagIsCheckbox>
-    <UAD_Xpath>/URAR_FORM/SUBJECT/ADDRESS/CITY</UAD_Xpath>
+    <UAD_Xpath>/INVOICE_DOCUMENT/HEADER/BILL_TO/CONTACT_PERSON</UAD_Xpath>
   </common>
   <common>
-    <ACI_TagPath>\URAR_FORM\SUBJECT\ADDRESS\</ACI_TagPath>
-    <ACI_TagName>STATE.1</ACI_TagName>
-    <ACI_Tag>URAR_FORM\SUBJECT\ADDRESS\STATE.1</ACI_Tag>
+    <ACI_TagPath>\</ACI_TagPath>
+    <ACI_TagName>ACME Solutions</ACI_TagName>
+    <ACI_Tag>ACME Solutions</ACI_Tag>
     <ACI_TagIsCheckbox>false</ACI_TagIsCheckbox>
-    <UAD_Xpath>/URAR_FORM/SUBJECT/ADDRESS/STATE</UAD_Xpath>
+    <UAD_Xpath>/INVOICE_DOCUMENT/HEADER/BILL_FROM/NAME</UAD_Xpath>
   </common>
   <common>
-    <ACI_TagPath>\URAR_FORM\SALES_HISTORY\SALE_GROUP[@type=&quot;prior&quot;][1]\</ACI_TagPath>
-    <ACI_TagName>SALE_DATE.1</ACI_TagName>
-    <ACI_Tag>URAR_FORM\SALES_HISTORY\SALE_GROUP[@type=&quot;prior&quot;][1]\SALE_DATE.1</ACI_Tag>
+    <ACI_TagPath>CONTACT\BILL_FROM\</ACI_TagPath>
+    <ACI_TagName>EMAIL.1</ACI_TagName>
+    <ACI_Tag>CONTACT\BILL_FROM\EMAIL.1</ACI_Tag>
     <ACI_TagIsCheckbox>false</ACI_TagIsCheckbox>
-    <UAD_Xpath>/URAR_FORM/SALES_HISTORY/SALE_GROUP[@type=&quot;prior&quot;][1]/SALE_DATE</UAD_Xpath>
+    <UAD_Xpath>/INVOICE_DOCUMENT/HEADER/BILL_FROM/EMAIL</UAD_Xpath>
   </common>
   <common>
-    <ACI_TagPath>\URAR_FORM\SALES_HISTORY\SALE_GROUP[@type=&quot;prior&quot;][1]\</ACI_TagPath>
-    <ACI_TagName>SALE_PRICE.1</ACI_TagName>
-    <ACI_Tag>URAR_FORM\SALES_HISTORY\SALE_GROUP[@type=&quot;prior&quot;][1]\SALE_PRICE.1</ACI_Tag>
+    <ACI_TagPath>PROD\ITEM_1\</ACI_TagPath>
+    <ACI_TagName>CODE.1</ACI_TagName>
+    <ACI_Tag>PROD\ITEM_1\CODE.1</ACI_Tag>
     <ACI_TagIsCheckbox>false</ACI_TagIsCheckbox>
-    <UAD_Xpath>/URAR_FORM/SALES_HISTORY/SALE_GROUP[@type=&quot;prior&quot;][1]/SALE_PRICE</UAD_Xpath>
+    <UAD_Xpath>/INVOICE_DOCUMENT/LINE_ITEMS/ITEM/PRODUCT_CODE</UAD_Xpath>
   </common>
   <common>
-    <ACI_TagPath>\URAR_FORM\SALES_HISTORY\SALE_GROUP[@type=&quot;listing&quot;][1]\</ACI_TagPath>
-    <ACI_TagName>LIST_DATE.1</ACI_TagName>
-    <ACI_Tag>URAR_FORM\SALES_HISTORY\SALE_GROUP[@type=&quot;listing&quot;][1]\LIST_DATE.1</ACI_Tag>
+    <ACI_TagPath>PROD\ITEM_1\</ACI_TagPath>
+    <ACI_TagName>DESC.1</ACI_TagName>
+    <ACI_Tag>PROD\ITEM_1\DESC.1</ACI_Tag>
     <ACI_TagIsCheckbox>false</ACI_TagIsCheckbox>
-    <UAD_Xpath>/URAR_FORM/SALES_HISTORY/SALE_GROUP[@type=&quot;listing&quot;][1]/LIST_DATE</UAD_Xpath>
+    <UAD_Xpath>/INVOICE_DOCUMENT/LINE_ITEMS/ITEM/DESCRIPTION</UAD_Xpath>
   </common>
   <common>
-    <ACI_TagPath>\URAR_FORM\SALES_HISTORY\SALE_GROUP[@type=&quot;listing&quot;][1]\</ACI_TagPath>
-    <ACI_TagName>LIST_PRICE.1</ACI_TagName>
-    <ACI_Tag>URAR_FORM\SALES_HISTORY\SALE_GROUP[@type=&quot;listing&quot;][1]\LIST_PRICE.1</ACI_Tag>
+    <ACI_TagPath>PROD\ITEM_1\</ACI_TagPath>
+    <ACI_TagName>CHARGE_BASE.1</ACI_TagName>
+    <ACI_Tag>PROD\ITEM_1\CHARGE_BASE.1</ACI_Tag>
     <ACI_TagIsCheckbox>false</ACI_TagIsCheckbox>
-    <UAD_Xpath>/URAR_FORM/SALES_HISTORY/SALE_GROUP[@type=&quot;listing&quot;][1]/LIST_PRICE</UAD_Xpath>
+    <UAD_Xpath>/INVOICE_DOCUMENT/LINE_ITEMS/ITEM/CHARGE[@type=&quot;base_price&quot;][1]</UAD_Xpath>
   </common>
   <common>
-    <ACI_TagPath>\URAR_FORM\SALES_HISTORY\SALE_GROUP[@type=&quot;listing&quot;][1]\</ACI_TagPath>
-    <ACI_TagName>NOTE.1</ACI_TagName>
-    <ACI_Tag>URAR_FORM\SALES_HISTORY\SALE_GROUP[@type=&quot;listing&quot;][1]\NOTE.1</ACI_Tag>
+    <ACI_TagPath>PROD\ITEM_1\</ACI_TagPath>
+    <ACI_TagName>CHARGE_TAX.1</ACI_TagName>
+    <ACI_Tag>PROD\ITEM_1\CHARGE_TAX.1</ACI_Tag>
     <ACI_TagIsCheckbox>false</ACI_TagIsCheckbox>
-    <UAD_Xpath>/URAR_FORM/SALES_HISTORY/SALE_GROUP[@type=&quot;listing&quot;][1]/NOTE</UAD_Xpath>
+    <UAD_Xpath>/INVOICE_DOCUMENT/LINE_ITEMS/ITEM/CHARGE[@type=&quot;tax&quot;][1]</UAD_Xpath>
   </common>
   <common>
-    <ACI_TagPath>\URAR_FORM\SALES_HISTORY\SALE_GROUP[@type=&quot;listing&quot;][1]\</ACI_TagPath>
-    <ACI_TagName>NOTE[2].1</ACI_TagName>
-    <ACI_Tag>URAR_FORM\SALES_HISTORY\SALE_GROUP[@type=&quot;listing&quot;][1]\NOTE[2].1</ACI_Tag>
+    <ACI_TagPath>PROD\ITEM_2\</ACI_TagPath>
+    <ACI_TagName>CODE.1</ACI_TagName>
+    <ACI_Tag>PROD\ITEM_2\CODE.1</ACI_Tag>
     <ACI_TagIsCheckbox>false</ACI_TagIsCheckbox>
-    <UAD_Xpath>/URAR_FORM/SALES_HISTORY/SALE_GROUP[@type=&quot;listing&quot;][1]/NOTE[2]</UAD_Xpath>
+    <UAD_Xpath>/INVOICE_DOCUMENT/LINE_ITEMS/ITEM[2]/PRODUCT_CODE</UAD_Xpath>
   </common>
   <common>
-    <ACI_TagPath>\URAR_FORM\IMPROVEMENTS\</ACI_TagPath>
-    <ACI_TagName>FEATURE[@type=&quot;interior&quot;].1</ACI_TagName>
-    <ACI_Tag>URAR_FORM\IMPROVEMENTS\FEATURE[@type=&quot;interior&quot;].1</ACI_Tag>
+    <ACI_TagPath>PROD\ITEM_2\</ACI_TagPath>
+    <ACI_TagName>DESC.1</ACI_TagName>
+    <ACI_Tag>PROD\ITEM_2\DESC.1</ACI_Tag>
     <ACI_TagIsCheckbox>false</ACI_TagIsCheckbox>
-    <UAD_Xpath>/URAR_FORM/IMPROVEMENTS/FEATURE[@type=&quot;interior&quot;]</UAD_Xpath>
+    <UAD_Xpath>/INVOICE_DOCUMENT/LINE_ITEMS/ITEM[2]/DESCRIPTION</UAD_Xpath>
   </common>
   <common>
-    <ACI_TagPath>\URAR_FORM\IMPROVEMENTS\</ACI_TagPath>
-    <ACI_TagName>FEATURE[@type=&quot;exterior&quot;].1</ACI_TagName>
-    <ACI_Tag>URAR_FORM\IMPROVEMENTS\FEATURE[@type=&quot;exterior&quot;].1</ACI_Tag>
+    <ACI_TagPath>PROD\ITEM_2\</ACI_TagPath>
+    <ACI_TagName>CHARGE_BASE.1</ACI_TagName>
+    <ACI_Tag>PROD\ITEM_2\CHARGE_BASE.1</ACI_Tag>
     <ACI_TagIsCheckbox>false</ACI_TagIsCheckbox>
-    <UAD_Xpath>/URAR_FORM/IMPROVEMENTS/FEATURE[@type=&quot;exterior&quot;]</UAD_Xpath>
+    <UAD_Xpath>/INVOICE_DOCUMENT/LINE_ITEMS/ITEM[2]/CHARGE[@type=&quot;base_price&quot;][1]</UAD_Xpath>
   </common>
   <common>
-    <ACI_TagPath>\URAR_FORM\IMPROVEMENTS\</ACI_TagPath>
-    <ACI_TagName>FEATURE[@type=&quot;interior&quot;][2].1</ACI_TagName>
-    <ACI_Tag>URAR_FORM\IMPROVEMENTS\FEATURE[@type=&quot;interior&quot;][2].1</ACI_Tag>
+    <ACI_TagPath>PROD\ITEM_2\</ACI_TagPath>
+    <ACI_TagName>CHARGE_TAX_1.1</ACI_TagName>
+    <ACI_Tag>PROD\ITEM_2\CHARGE_TAX_1.1</ACI_Tag>
     <ACI_TagIsCheckbox>false</ACI_TagIsCheckbox>
-    <UAD_Xpath>/URAR_FORM/IMPROVEMENTS/FEATURE[@type=&quot;interior&quot;][2]</UAD_Xpath>
+    <UAD_Xpath>/INVOICE_DOCUMENT/LINE_ITEMS/ITEM[2]/CHARGE[@type=&quot;tax&quot;][1]</UAD_Xpath>
   </common>
   <common>
-    <ACI_TagPath>\URAR_FORM\IMPROVEMENTS\</ACI_TagPath>
-    <ACI_TagName>FEATURE[@type=&quot;exterior&quot;][2].1</ACI_TagName>
-    <ACI_Tag>URAR_FORM\IMPROVEMENTS\FEATURE[@type=&quot;exterior&quot;][2].1</ACI_Tag>
+    <ACI_TagPath>PROD\ITEM_2\</ACI_TagPath>
+    <ACI_TagName>CHARGE_TAX_2.1</ACI_TagName>
+    <ACI_Tag>PROD\ITEM_2\CHARGE_TAX_2.1</ACI_Tag>
     <ACI_TagIsCheckbox>false</ACI_TagIsCheckbox>
-    <UAD_Xpath>/URAR_FORM/IMPROVEMENTS/FEATURE[@type=&quot;exterior&quot;][2]</UAD_Xpath>
+    <UAD_Xpath>/INVOICE_DOCUMENT/LINE_ITEMS/ITEM[2]/CHARGE[@type=&quot;tax&quot;][2]</UAD_Xpath>
+  </common>
+  <common>
+    <ACI_TagPath>PROD\ITEM_2\</ACI_TagPath>
+    <ACI_TagName>CHARGE_DISCOUNT.1</ACI_TagName>
+    <ACI_Tag>PROD\ITEM_2\CHARGE_DISCOUNT.1</ACI_Tag>
+    <ACI_TagIsCheckbox>false</ACI_TagIsCheckbox>
+    <UAD_Xpath>/INVOICE_DOCUMENT/LINE_ITEMS/ITEM[2]/CHARGE[@type=&quot;discount&quot;][1]</UAD_Xpath>
+  </common>
+  <common>
+    <ACI_TagPath>TOTALS\</ACI_TagPath>
+    <ACI_TagName>SUBTOTAL.1</ACI_TagName>
+    <ACI_Tag>TOTALS\SUBTOTAL.1</ACI_Tag>
+    <ACI_TagIsCheckbox>false</ACI_TagIsCheckbox>
+    <UAD_Xpath>/INVOICE_DOCUMENT/TOTALS/SUBTOTAL</UAD_Xpath>
+  </common>
+  <common>
+    <ACI_TagPath>TOTALS\</ACI_TagPath>
+    <ACI_TagName>GRAND_TOTAL.1</ACI_TagName>
+    <ACI_Tag>TOTALS\GRAND_TOTAL.1</ACI_Tag>
+    <ACI_TagIsCheckbox>false</ACI_TagIsCheckbox>
+    <UAD_Xpath>/INVOICE_DOCUMENT/TOTALS/GRAND_TOTAL</UAD_Xpath>
   </common>
 </MappingData>

@@ -16,21 +16,25 @@ function escapeXml(unsafe) {
     });
 }
 
-function createCommonBlock(originalXpath) {
-    const uadXpath = originalXpath;
-    const cleanXpath = originalXpath.replace(/$$[^$$]+\]/g, '');
-    const parts = cleanXpath.substring(1).split('/');
+/**
+ * Creates a single <common> XML block based on the two parts of an input line.
+ * @param {string} aciValue The string before the ':', e.g., "PROD\ITEM_2\CHARGE_TAX_1.1"
+ * @param {string} uadXpath The string after the ':', e.g., "/INVOICE_DOCUMENT/..."
+ * @returns {string} The formatted <common> XML block as a string.
+ */
+function createCommonBlock(aciValue, uadXpath) {
+    const uadXpathTag = uadXpath;
+    const aciTag = aciValue;
 
-    // --- THIS IS THE MODIFIED LINE ---
-    // We now add the '.1' suffix to the tag name itself.
-    const aciTagName = parts[parts.length - 1] + '.1';
-
-    const pathOnlyParts = parts.slice(0, -1);
-    const aciTagPath = `\\${pathOnlyParts.join('\\')}\\`;
-
-    // The logic for ACI_Tag is now simpler, as it's just the path + the new ACI_TagName
-    const aciTag = cleanXpath.substring(1).replace(/\//g, '\\') + '.1';
+    const aciParts = aciTag.split('\\');
+    const aciTagName = aciParts[aciParts.length - 1];
     
+    const pathParts = aciParts.slice(0, -1);
+
+    // --- THIS IS THE CORRECTED LINE ---
+    // A leading backslash is now prepended to the path.
+    const aciTagPath = `\\${pathParts.join('\\')}\\`;
+
     const aciTagIsCheckbox = 'false';
 
     return `  <common>
@@ -38,7 +42,7 @@ function createCommonBlock(originalXpath) {
     <ACI_TagName>${escapeXml(aciTagName)}</ACI_TagName>
     <ACI_Tag>${escapeXml(aciTag)}</ACI_Tag>
     <ACI_TagIsCheckbox>${escapeXml(aciTagIsCheckbox)}</ACI_TagIsCheckbox>
-    <UAD_Xpath>${escapeXml(uadXpath)}</UAD_Xpath>
+    <UAD_Xpath>${escapeXml(uadXpathTag)}</UAD_Xpath>
   </common>`;
 }
 
@@ -56,7 +60,7 @@ function askQuestion(query) {
 
 async function main() {
     console.log("--- Welcome to the XML Reverser App ---");
-    const inputFilename = await askQuestion('Enter the path to your input .txt file (e.g., output/stores.txt): ');
+    const inputFilename = await askQuestion('Enter the path to your input .txt file: ');
     const inputPath = path.resolve(inputFilename);
     if (!fs.existsSync(inputPath)) {
         console.error(`✖ Error: Input file not found at ${inputPath}`);
@@ -64,21 +68,24 @@ async function main() {
         return;
     }
     const defaultOutput = 'output/mapping.xml';
-    const outputPath = await askQuestion(`Enter the path for your new output XML file (press Enter for default: ${defaultOutput}): `) || defaultOutput;
+    const outputPath = await askQuestion(`Enter the path for your new output XML file (default: ${defaultOutput}): `) || defaultOutput;
     try {
         console.log("\nReading input file and processing...");
         const fileContent = fs.readFileSync(inputPath, 'utf8');
         const lines = fileContent.split('\n').filter(line => line.trim() !== '');
         const commonBlocks = [];
+        
         for (const line of lines) {
             const parts = line.split(' : ');
             if (parts.length === 2) {
-                const xpath = parts[1].trim();
-                commonBlocks.push(createCommonBlock(xpath));
+                const aciValue = parts[0].trim();
+                const uadXpath = parts[1].trim();
+                commonBlocks.push(createCommonBlock(aciValue, uadXpath));
             } else {
                 console.warn(`Skipping malformed line: ${line}`);
             }
         }
+        
         const finalXml = `<MappingData>\n${commonBlocks.join('\n')}\n</MappingData>`;
         const outputDir = path.dirname(outputPath);
         if (!fs.existsSync(outputDir)) {
