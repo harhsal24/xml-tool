@@ -18,21 +18,26 @@ function escapeXml(unsafe) {
 
 /**
  * Creates a single <common> XML block based on the two parts of an input line.
- * Includes a special case for 'true'/'false' values.
- * @param {string} aciValue The string before the ':', e.g., "PROD\ITEM_2\CHARGE_TAX_1.1" or "true"
- * @param {string} uadXpath The string after the ':', e.g., "/INVOICE_DOCUMENT/..."
- * @returns {string} The formatted <common> XML block as a string.
+ * Returns null if the block should be skipped.
+ * @param {string} aciValue The string before the ':', e.g., "URAR\SUBJECT\ADDRESS\CITY.1"
+ * @param {string} uadXpath The string after the ':', e.g., "/URAR_FORM/SUBJECT/ADDRESS/CITY"
+ * @returns {string|null} The formatted <common> XML block as a string, or null to skip.
  */
 function createCommonBlock(aciValue, uadXpath) {
-    // --- NEW LOGIC: Handle the special 'true'/'false' case ---
+    // First, handle the special 'true'/'false' case. This rule takes precedence.
     if (aciValue === 'true' || aciValue === 'false') {
-        // If the value is 'true' or 'false', return the simplified block.
         return `  <common>
     <UAD_Xpath>${escapeXml(uadXpath)}</UAD_Xpath>
   </common>`;
     }
 
-    // --- EXISTING LOGIC: Runs for all other lines ---
+    // --- NEW LOGIC: Skip the line if it doesn't start with "URAR" ---
+    if (!aciValue.startsWith('URAR')) {
+        // Return null to signify that this line should be skipped.
+        return null;
+    }
+
+    // --- EXISTING LOGIC: Runs only for lines that start with "URAR" ---
     const uadXpathTag = uadXpath;
     const aciTag = aciValue;
 
@@ -53,7 +58,7 @@ function createCommonBlock(aciValue, uadXpath) {
 }
 
 
-// --- Interactive Console Logic (Unchanged) ---
+// --- Interactive Console Logic (with a small change in the loop) ---
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -80,13 +85,23 @@ async function main() {
         const fileContent = fs.readFileSync(inputPath, 'utf8');
         const lines = fileContent.split('\n').filter(line => line.trim() !== '');
         const commonBlocks = [];
+        let skippedCount = 0;
         
         for (const line of lines) {
             const parts = line.split(' : ');
             if (parts.length === 2) {
                 const aciValue = parts[0].trim();
                 const uadXpath = parts[1].trim();
-                commonBlocks.push(createCommonBlock(aciValue, uadXpath));
+                
+                // --- MODIFIED LOGIC: Check the result before adding it ---
+                const block = createCommonBlock(aciValue, uadXpath);
+                if (block) {
+                    // Only add the block to the array if it's not null.
+                    commonBlocks.push(block);
+                } else {
+                    skippedCount++;
+                }
+
             } else {
                 console.warn(`Skipping malformed line: ${line}`);
             }
@@ -99,6 +114,9 @@ async function main() {
         }
         fs.writeFileSync(outputPath, finalXml, 'utf8');
         console.log(`\n✔ Success! Generated ${commonBlocks.length} records.`);
+        if (skippedCount > 0) {
+            console.log(`(Skipped ${skippedCount} records that did not start with 'URAR'.)`);
+        }
         console.log(`Output written to: ${outputPath}`);
     } catch (error) {
         console.error(`\n✖ An error occurred during processing: ${error.message}`);
