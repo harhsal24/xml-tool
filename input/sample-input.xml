@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MESSAGE>
+  <DOCUMENT_SETS>
+    <DOCUMENT_SET>
+      <DOCUMENTS>
+        <DOCUMENT>
+          <DEAL_SETS>
+            <DEAL_SET>
+              <DEALS>
+                <DEAL>
+                  <SERVICES>
+                    <SERVICE>
+                      <VALUATION>
+                        <VALUATION_RESPONSE>
+                          <VALUATION_ANALYSES>
+                            <VALUATION_ANALYSIS>
+                              <PROPERTIES>
+                                <!-- Subject Property 1 -->
+                                <PROPERTY ValuationUseType="SubjectProperty">
+                                  <INSPECTIONS>
+                                    <INSPECTION>
+                                      <IMAGES>
+                                        <IMAGE>
+                                          <ImageCategoryType>SITE_IMAGE_CATEGORY_1</ImageCategoryType>
+                                          <ImageFileLocationIdentifier>subject_front_view.jpg</ImageFileLocationIdentifier>
+                                          <MIMETYPEIdentifier>..\..\PROPERTY_PHOTOS\IMAGE_FILE_TYPE.1</MIMETYPEIdentifier>
+                                        </IMAGE>
+                                        <IMAGE>
+                                          <ImageCategoryType>SITE_IMAGE_CATEGORY_2</ImageCategoryType>
+                                          <ImageFileLocationIdentifier>subject_rear_view.jpg</ImageFileLocationIdentifier>
+                                          <MIMETYPEIdentifier>..\..\PROPERTY_PHOTOS\IMAGE_FILE_TYPE.2</MIMETYPEIdentifier>
+                                        </IMAGE>
+                                        <IMAGE>
+                                          <ImageCategoryType>INTERIOR_IMAGE_CATEGORY_1</ImageCategoryType>
+                                          <ImageFileLocationIdentifier>subject_living_room.jpg</ImageFileLocationIdentifier>
+                                          <MIMETYPEIdentifier>..\..\INTERIOR_PHOTOS\IMAGE_FILE_TYPE.3</MIMETYPEIdentifier>
+                                        </IMAGE>
+                                      </IMAGES>
+                                    </INSPECTION>
+                                  </INSPECTIONS>
+                                </PROPERTY>
+                                
+                                <!-- Subject Property 2 -->
+                                <PROPERTY ValuationUseType="SubjectProperty">
+                                  <INSPECTIONS>
+                                    <INSPECTION>
+                                      <IMAGES>
+                                        <IMAGE>
+                                          <ImageCategoryType>SITE_IMAGE_CATEGORY_3</ImageCategoryType>
+                                          <ImageFileLocationIdentifier>subject_street_view.jpg</ImageFileLocationIdentifier>
+                                          <MIMETYPEIdentifier>..\..\STREET_PHOTOS\SUBJECT\IMAGE_FILE_TYPE.4</MIMETYPEIdentifier>
+                                        </IMAGE>
+                                        <IMAGE>
+                                          <ImageCategoryType>NEIGHBORHOOD_IMAGE</ImageCategoryType>
+                                          <ImageFileLocationIdentifier>subject_neighborhood.jpg</ImageFileLocationIdentifier>
+                                          <MIMETYPEIdentifier>..\..\NEIGHBORHOOD\IMAGE_FILE_TYPE.5</MIMETYPEIdentifier>
+                                        </IMAGE>
+                                      </IMAGES>
+                                    </INSPECTION>
+                                  </INSPECTIONS>
+                                </PROPERTY>
+                                
+                                <!-- Comparable Property 1 -->
+                                <PROPERTY ValuationUseType="Comparable">
+                                  <INSPECTIONS>
+                                    <INSPECTION>
+                                      <IMAGES>
+                                        <IMAGE>
+                                          <ImageCategoryType>SITE_IMAGE_CATEGORY_1</ImageCategoryType>
+                                          <ImageFileLocationIdentifier>comp1_front_view.jpg</ImageFileLocationIdentifier>
+                                          <MIMETYPEIdentifier>..\..\COMPARABLE_PHOTOS\COMP1\IMAGE_FILE_TYPE.6</MIMETYPEIdentifier>
+                                        </IMAGE>
+                                        <IMAGE>
+                                          <ImageCategoryType>SITE_IMAGE_CATEGORY_2</ImageCategoryType>
+                                          <ImageFileLocationIdentifier>comp1_rear_view.jpg</ImageFileLocationIdentifier>
+                                          <MIMETYPEIdentifier>..\..\COMPARABLE_PHOTOS\COMP1\IMAGE_FILE_TYPE.7</MIMETYPEIdentifier>
+                                        </IMAGE>
+                                      </IMAGES>
+                                    </INSPECTION>
+                                  </INSPECTIONS>
+                                </PROPERTY>
+                                
+                                <!-- Comparable Property 2 -->
+                                <PROPERTY ValuationUseType="Comparable">
+                                  <INSPECTIONS>
+                                    <INSPECTION>
+                                      <IMAGES>
+                                        <IMAGE>
+                                          <ImageCategoryType>SITE_IMAGE_CATEGORY_1</ImageCategoryType>
+                                          <ImageFileLocationIdentifier>comp2_front_view.jpg</ImageFileLocationIdentifier>
+                                          <MIMETYPEIdentifier>..\..\COMPARABLE_PHOTOS\COMP2\IMAGE_FILE_TYPE.8</MIMETYPEIdentifier>
+                                        </IMAGE>
+                                        <IMAGE>
+                                          <ImageCategoryType>AERIAL_VIEW</ImageCategoryType>
+                                          <ImageFileLocationIdentifier>comp2_aerial.jpg</ImageFileLocationIdentifier>
+                                          <MIMETYPEIdentifier>..\..\AERIAL_PHOTOS\IMAGE_FILE_TYPE.9</MIMETYPEIdentifier>
+                                        </IMAGE>
+                                      </IMAGES>
+                                    </INSPECTION>
+                                  </INSPECTIONS>
+                                </PROPERTY>
+                                
+                                <!-- Comparable Property 3 -->
+                                <PROPERTY ValuationUseType="Comparable">
+                                  <INSPECTIONS>
+                                    <INSPECTION>
+                                      <IMAGES>
+                                        <IMAGE>
+                                          <ImageCategoryType>SITE_IMAGE_CATEGORY_1</ImageCategoryType>
+                                          <ImageFileLocationIdentifier>comp3_front_view.jpg</ImageFileLocationIdentifier>
+                                          <MIMETYPEIdentifier>..\..\COMPARABLE_PHOTOS\COMP3\IMAGE_FILE_TYPE.10</MIMETYPEIdentifier>
+                                        </IMAGE>
+                                        <IMAGE>
+                                          <ImageCategoryType>SITE_IMAGE_CATEGORY_2</ImageCategoryType>
+                                          <ImageFileLocationIdentifier>comp3_side_view.jpg</ImageFileLocationIdentifier>
+                                          <MIMETYPEIdentifier>..\..\COMPARABLE_PHOTOS\COMP3\IMAGE_FILE_TYPE.11</MIMETYPEIdentifier>
+                                        </IMAGE>
+                                        <IMAGE>
+                                          <ImageCategoryType>INTERIOR_IMAGE_CATEGORY_1</ImageCategoryType>
+                                          <ImageFileLocationIdentifier>comp3_kitchen.jpg</ImageFileLocationIdentifier>
+                                          <MIMETYPEIdentifier>..\..\INTERIOR_PHOTOS\COMP3\IMAGE_FILE_TYPE.12</MIMETYPEIdentifier>
+                                        </IMAGE>
+                                      </IMAGES>
+                                    </INSPECTION>
+                                  </INSPECTIONS>
+                                </PROPERTY>
+                                
+                                <!-- Market Analysis Property -->
+                                <PROPERTY ValuationUseType="MarketAnalysis">
+                                  <INSPECTIONS>
+                                    <INSPECTION>
+                                      <IMAGES>
+                                        <IMAGE>
+                                          <ImageCategoryType>MARKET_TREND_CHART</ImageCategoryType>
+                                          <ImageFileLocationIdentifier>market_trends.png</ImageFileLocationIdentifier>
+                                          <MIMETYPEIdentifier>..\..\MARKET_DATA\CHARTS\IMAGE_FILE_TYPE.13</MIMETYPEIdentifier>
+                                        </IMAGE>
+                                        <IMAGE>
+                                          <ImageCategoryType>AREA_MAP</ImageCategoryType>
+                                          <ImageFileLocationIdentifier>area_map.jpg</ImageFileLocationIdentifier>
+                                          <MIMETYPEIdentifier>..\..\MAPS\AREA\IMAGE_FILE_TYPE.14</MIMETYPEIdentifier>
+                                        </IMAGE>
+                                      </IMAGES>
+                                    </INSPECTION>
+                                  </INSPECTIONS>
+                                </PROPERTY>
+                                
+                                <!-- Property without MIMETYPEIdentifier (edge case) -->
+                                <PROPERTY ValuationUseType="SubjectProperty">
+                                  <INSPECTIONS>
+                                    <INSPECTION>
+                                      <IMAGES>
+                                        <IMAGE>
+                                          <ImageCategoryType>BACKUP_IMAGE</ImageCategoryType>
+                                          <ImageFileLocationIdentifier>backup_photo.jpg</ImageFileLocationIdentifier>
+                                        </IMAGE>
+                                      </IMAGES>
+                                    </INSPECTION>
+                                  </INSPECTIONS>
+                                </PROPERTY>
+                                
+                              </PROPERTIES>
+                            </VALUATION_ANALYSIS>
+                          </VALUATION_ANALYSES>
+                        </VALUATION_RESPONSE>
+                      </VALUATION>
+                    </SERVICE>
+                  </SERVICES>
+                </DEAL>
+              </DEALS>
+            </DEAL_SET>
+          </DEAL_SETS>
+        </DOCUMENT>
+      </DOCUMENTS>
+    </DOCUMENT_SET>
+  </DOCUMENT_SETS>
+</MESSAGE>

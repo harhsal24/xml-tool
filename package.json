@@ -10,6 +10,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@xmldom/xmldom": "^0.9.8"
+    "@xmldom/xmldom": "^0.9.8",
+    "xmldom": "^0.6.0"
   }
 }
