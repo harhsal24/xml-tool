@@ -26,16 +26,26 @@ function escapeXml(unsafe) {
 function createCommonBlock(aciValue, uadXpath) {
     // First, handle the special 'true'/'false' case. This rule takes precedence.
     if (aciValue === 'true' || aciValue === 'false') {
-        return `  <common>
-    <UAD_Xpath>${escapeXml(uadXpath)}</UAD_Xpath>
-  </common>`;
+//         return `  <common>
+//     <UAD_Xpath>${escapeXml(uadXpath)}</UAD_Xpath>
+//   </common>`;
+return null;
     }
 
-    // --- NEW LOGIC: Skip the line if it doesn't start with "URAR" ---
-    if (!aciValue.startsWith('URAR')) {
+      // --- NEW LOGIC: Skip lines where UAD xpath ends with ImageFileLocationIdentifier ---
+    const xpathParts = uadXpath.split('/').filter(part => part.trim() !== '');
+    const lastXpathSegment = xpathParts[xpathParts.length - 1];
+    if (lastXpathSegment === 'ImageFileLocationIdentifier') {
+        return null;
+    }
+
+
+    // --- NEW LOGIC: Skip the line if it doesn't start with "URAR" or "USER" ---
+    if (!aciValue.startsWith('URAR') && !aciValue.startsWith('USER')) {
         // Return null to signify that this line should be skipped.
         return null;
     }
+    
 
     // --- EXISTING LOGIC: Runs only for lines that start with "URAR" ---
     const uadXpathTag = uadXpath;

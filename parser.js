@@ -19,6 +19,11 @@ function generateXpathList(xmlString, options) {
 
 function traverse(node, currentPath, results, options) {
     if (node.nodeType !== 1) return;
+    
+      // --- NEW LOGIC: Skip ImageFileLocationIdentifier nodes ---
+    if (node.tagName === 'ImageFileLocationIdentifier') {
+        return;
+    }
     const childElements = Array.from(node.childNodes).filter(n => n.nodeType === 1);
     if (childElements.length === 0 && node.textContent.trim()) {
         const leafValue = node.textContent.trim();
