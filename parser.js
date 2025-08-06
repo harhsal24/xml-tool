@@ -20,10 +20,11 @@ function generateXpathList(xmlString, options) {
 function traverse(node, currentPath, results, options) {
     if (node.nodeType !== 1) return;
     
-      // --- NEW LOGIC: Skip ImageFileLocationIdentifier nodes ---
-    if (node.tagName === 'ImageFileLocationIdentifier') {
+    // --- CONFIGURABLE LOGIC: Skip specified leaf nodes ---
+    if (options.ignoreLeafNodes && options.ignoreLeafNodes.includes(node.tagName)) {
         return;
     }
+    
     const childElements = Array.from(node.childNodes).filter(n => n.nodeType === 1);
     if (childElements.length === 0 && node.textContent.trim()) {
         const leafValue = node.textContent.trim();
@@ -84,23 +85,47 @@ function traverse(node, currentPath, results, options) {
 
 function main() {
     // --- CONFIGURATION ---
-    // You can now switch between forcing all or forcing specific tags.
     const options = {
-        // SCENARIO 1: Set to [] to force index [1] for ALL tags.
+        // INDEXING OPTIONS
+        // Set to [] to force index [1] for ALL tags, or specify specific tags
         forceIndexOneFor: [], 
         
-        // SCENARIO 2: Set to ['SECTION'] to only force for SECTION tags.
-        // forceIndexOneFor: ['SECTION'], 
-
-        exceptionsToIndexOneForcing: ['SUB_SECTION'],
-        attributesToIncludeInPath: ['id'],
+        // Tags that are exceptions to the force rule above (never show [1])
+        exceptionsToIndexOneForcing: [
+            'MESSAGE',
+            'DOCUMENT_SETS', 'DOCUMENT_SET',
+            'DOCUMENTS', 'DOCUMENT',
+            'DEAL_SETS', 'DEAL_SET',
+            'DEALS', 'DEAL',
+            'SERVICES', 'SERVICE',
+            'VALUATION', 'VALUATION_RESPONSE',
+            'VALUATION_ANALYSES', 'VALUATION_ANALYSIS',
+            'PROPERTIES'
+        ],
+        
+        // ATTRIBUTE OPTIONS
+        // Attributes to include in XPath predicates
+        attributesToIncludeInPath: ['ValuationUseType'],
+        
+        // IGNORE OPTIONS
+        // Leaf nodes to completely ignore during traversal
+        ignoreLeafNodes: [
+            'ImageFileLocationIdentifier',
+            // Add more leaf nodes to ignore as needed
+        ]
     };
 
     const inputFilename = process.argv[2];
     if (!inputFilename) {
         console.error("Usage: node parser.js <input_filename.xml>");
+        console.error("\nConfiguration:");
+        console.error("  Force index [1] for:", options.forceIndexOneFor.length === 0 ? "ALL tags" : options.forceIndexOneFor);
+        console.error("  Exceptions to force rule:", options.exceptionsToIndexOneForcing);
+        console.error("  Attributes to include:", options.attributesToIncludeInPath);
+        console.error("  Ignored leaf nodes:", options.ignoreLeafNodes);
         process.exit(1);
     }
+    
     const inputPath = path.join(__dirname, 'input', inputFilename);
     const outputDir = path.join(__dirname, 'output');
     const outputFilename = path.basename(inputFilename, path.extname(inputFilename)) + '.txt';
@@ -111,10 +136,23 @@ function main() {
             fs.mkdirSync(outputDir);
         }
         console.log(`Reading XML file from: ${inputPath}`);
+        console.log("\nCurrent Configuration:");
+        console.log("  Force index [1] for:", options.forceIndexOneFor.length === 0 ? "ALL tags" : options.forceIndexOneFor);
+        console.log("  Exceptions to force rule:", options.exceptionsToIndexOneForcing);
+        console.log("  Attributes to include:", options.attributesToIncludeInPath);
+        console.log("  Ignored leaf nodes:", options.ignoreLeafNodes);
+        
         const xmlData = fs.readFileSync(inputPath, 'utf8');
         const outputContent = generateXpathList(xmlData, options);
+        const lines = outputContent.split('\n').filter(line => line.trim() !== '');
+        
         fs.writeFileSync(outputPath, outputContent, 'utf8');
-        console.log(`✔ Successfully parsed XML and wrote output to: ${outputPath}`);
+        console.log(`\n✔ Successfully parsed XML and wrote output to: ${outputPath}`);
+        console.log(`✔ Generated ${lines.length} XPath entries`);
+        
+        if (options.ignoreLeafNodes.length > 0) {
+            console.log(`✔ Ignored ${options.ignoreLeafNodes.length} leaf node types: ${options.ignoreLeafNodes.join(', ')}`);
+        }
     } catch (error) {
         console.error("✖ An error occurred:", error.message);
     }
