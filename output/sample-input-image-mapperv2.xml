@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ImageMappings>
+    <common>
+        <ACI_TagRedirector>IMAGE_FILE.1</ACI_TagRedirector>
+        <ACI_Tag>..\..\PROPERTY_PHOTOS\IMAGE_FILE_TYPE.1</ACI_Tag>
+        <ACI_TagName>Global Tech Inc.</ACI_TagName>
+        <ACI_TagIsImage>true</ACI_TagIsImage>
+        <ACI_ImageSource>d:ImageFileLocationIdentifier</ACI_ImageSource>
+        <UAD_Xpath>/MESSAGE/DOCUMENT_SETS/DOCUMENT_SET/DOCUMENTS/DOCUMENT/DEAL_SETS/DEAL_SET/DEALS/DEAL/SERVICES/SERVICE/VALUATION/VALUATION_RESPONSE/VALUATION_ANALYSES/VALUATION_ANALYSIS/PROPERTIES/PROPERTY[@ValuationUseType="SubjectProperty"][1]/INSPECTIONS[1]/INSPECTION[1]/IMAGES[1]/IMAGE[1]/ImageFileLocationIdentifier[1]</UAD_Xpath>
+    </common>
+    <common>
+        <ACI_TagRedirector>IMAGE_FILE.1</ACI_TagRedirector>
+        <ACI_Tag>..\..\PROPERTY_PHOTOS\IMAGE_FILE_TYPE.1</ACI_Tag>
+        <ACI_TagName>Global Tech Inc.</ACI_TagName>
+        <ACI_TagIsImage>true</ACI_TagIsImage>
+        <ACI_ImageSource>d:ImageFileLocationIdentifier</ACI_ImageSource>
+        <UAD_Xpath>/MESSAGE/DOCUMENT_SETS/DOCUMENT_SET/DOCUMENTS/DOCUMENT/DEAL_SETS/DEAL_SET/DEALS/DEAL/SERVICES/SERVICE/VALUATION/VALUATION_RESPONSE/VALUATION_ANALYSES/VALUATION_ANALYSIS/PROPERTIES/PROPERTY[@ValuationUseType="SubjectProperty"][1]/INSPECTIONS[1]/INSPECTION[1]/IMAGES[1]/IMAGE[2]/ImageFileLocationIdentifier[1]</UAD_Xpath>
+    </common>
+    <common>
+        <ACI_TagRedirector>IMAGE_FILE.1</ACI_TagRedirector>
+        <ACI_Tag>..\..\PROPERTY_PHOTOS\IMAGE_FILE_TYPE.1</ACI_Tag>
+        <ACI_TagName>Global Tech Inc.</ACI_TagName>
+        <ACI_TagIsImage>true</ACI_TagIsImage>
+        <ACI_ImageSource>d:ImageFileLocationIdentifier</ACI_ImageSource>
+        <UAD_Xpath>/MESSAGE/DOCUMENT_SETS/DOCUMENT_SET/DOCUMENTS/DOCUMENT/DEAL_SETS/DEAL_SET/DEALS/DEAL/SERVICES/SERVICE/VALUATION/VALUATION_RESPONSE/VALUATION_ANALYSES/VALUATION_ANALYSIS/PROPERTIES/PROPERTY[@ValuationUseType="SubjectProperty"][1]/INSPECTIONS[1]/INSPECTION[1]/IMAGES[1]/IMAGE[3]/ImageFileLocationIdentifier[1]</UAD_Xpath>
+    </common>
+    <common>
+        <ACI_TagRedirector>IMAGE_FILE.1</ACI_TagRedirector>
+        <ACI_Tag>..\..\PROPERTY_PHOTOS\IMAGE_FILE_TYPE.1</ACI_Tag>
+        <ACI_TagName>Global Tech Inc.</ACI_TagName>
+        <ACI_TagIsImage>true</ACI_TagIsImage>
+        <ACI_ImageSource>d:ImageFileLocationIdentifier</ACI_ImageSource>
+        <UAD_Xpath>/MESSAGE/DOCUMENT_SETS/DOCUMENT_SET/DOCUMENTS/DOCUMENT/DEAL_SETS/DEAL_SET/DEALS/DEAL/SERVICES/SERVICE/VALUATION/VALUATION_RESPONSE/VALUATION_ANALYSES/VALUATION_ANALYSIS/PROPERTIES/PROPERTY[@ValuationUseType="SubjectProperty"][2]/INSPECTIONS[1]/INSPECTION[1]/IMAGES[1]/IMAGE[1]/ImageFileLocationIdentifier[1]</UAD_Xpath>
+    </common>
+    <common>
+        <ACI_TagRedirector>IMAGE_FILE.1</ACI_TagRedirector>
+        <ACI_Tag>..\..\PROPERTY_PHOTOS\IMAGE_FILE_TYPE.1</ACI_Tag>
+        <ACI_TagName>Global Tech Inc.</ACI_TagName>
+        <ACI_TagIsImage>true</ACI_TagIsImage>
+        <ACI_ImageSource>d:ImageFileLocationIdentifier</ACI_ImageSource>
+        <UAD_Xpath>/MESSAGE/DOCUMENT_SETS/DOCUMENT_SET/DOCUMENTS/DOCUMENT/DEAL_SETS/DEAL_SET/DEALS/DEAL/SERVICES/SERVICE/VALUATION/VALUATION_RESPONSE/VALUATION_ANALYSES/VALUATION_ANALYSIS/PROPERTIES/PROPERTY[@ValuationUseType="SubjectProperty"][2]/INSPECTIONS[1]/INSPECTION[1]/IMAGES[1]/IMAGE[2]/ImageFileLocationIdentifier[1]</UAD_Xpath>
+    </common>
+    <common>
+        <ACI_TagRedirector>IMAGE_FILE.6</ACI_TagRedirector>
+        <ACI_Tag>..\..\COMPARABLE_PHOTOS\COMP1\IMAGE_FILE_TYPE.6</ACI_Tag>
+        <ACI_TagName>Global Tech Inc.</ACI_TagName>
+        <ACI_TagIsImage>true</ACI_TagIsImage>
+        <ACI_ImageSource>d:ImageFileLocationIdentifier</ACI_ImageSource>
+        <UAD_Xpath>/MESSAGE/DOCUMENT_SETS/DOCUMENT_SET/DOCUMENTS/DOCUMENT/DEAL_SETS/DEAL_SET/DEALS/DEAL/SERVICES/SERVICE/VALUATION/VALUATION_RESPONSE/VALUATION_ANALYSES/VALUATION_ANALYSIS/PROPERTIES/PROPERTY[@ValuationUseType="Comparable"][1]/INSPECTIONS[1]/INSPECTION[1]/IMAGES[1]/IMAGE[1]/ImageFileLocationIdentifier[1]</UAD_Xpath>
+    </common>
+    <common>
+        <ACI_TagRedirector>IMAGE_FILE.6</ACI_TagRedirector>
+        <ACI_Tag>..\..\COMPARABLE_PHOTOS\COMP1\IMAGE_FILE_TYPE.6</ACI_Tag>
+        <ACI_TagName>Global Tech Inc.</ACI_TagName>
+        <ACI_TagIsImage>true</ACI_TagIsImage>
+        <ACI_ImageSource>d:ImageFileLocationIdentifier</ACI_ImageSource>
+        <UAD_Xpath>/MESSAGE/DOCUMENT_SETS/DOCUMENT_SET/DOCUMENTS/DOCUMENT/DEAL_SETS/DEAL_SET/DEALS/DEAL/SERVICES/SERVICE/VALUATION/VALUATION_RESPONSE/VALUATION_ANALYSES/VALUATION_ANALYSIS/PROPERTIES/PROPERTY[@ValuationUseType="Comparable"][1]/INSPECTIONS[1]/INSPECTION[1]/IMAGES[1]/IMAGE[2]/ImageFileLocationIdentifier[1]</UAD_Xpath>
+    </common>
+    <common>
+        <ACI_TagRedirector>IMAGE_FILE.6</ACI_TagRedirector>
+        <ACI_Tag>..\..\COMPARABLE_PHOTOS\COMP1\IMAGE_FILE_TYPE.6</ACI_Tag>
+        <ACI_TagName>Global Tech Inc.</ACI_TagName>
+        <ACI_TagIsImage>true</ACI_TagIsImage>
+        <ACI_ImageSource>d:ImageFileLocationIdentifier</ACI_ImageSource>
+        <UAD_Xpath>/MESSAGE/DOCUMENT_SETS/DOCUMENT_SET/DOCUMENTS/DOCUMENT/DEAL_SETS/DEAL_SET/DEALS/DEAL/SERVICES/SERVICE/VALUATION/VALUATION_RESPONSE/VALUATION_ANALYSES/VALUATION_ANALYSIS/PROPERTIES/PROPERTY[@ValuationUseType="Comparable"][2]/INSPECTIONS[1]/INSPECTION[1]/IMAGES[1]/IMAGE[1]/ImageFileLocationIdentifier[1]</UAD_Xpath>
+    </common>
+    <common>
+        <ACI_TagRedirector>IMAGE_FILE.6</ACI_TagRedirector>
+        <ACI_Tag>..\..\COMPARABLE_PHOTOS\COMP1\IMAGE_FILE_TYPE.6</ACI_Tag>
+        <ACI_TagName>Global Tech Inc.</ACI_TagName>
+        <ACI_TagIsImage>true</ACI_TagIsImage>
+        <ACI_ImageSource>d:ImageFileLocationIdentifier</ACI_ImageSource>
+        <UAD_Xpath>/MESSAGE/DOCUMENT_SETS/DOCUMENT_SET/DOCUMENTS/DOCUMENT/DEAL_SETS/DEAL_SET/DEALS/DEAL/SERVICES/SERVICE/VALUATION/VALUATION_RESPONSE/VALUATION_ANALYSES/VALUATION_ANALYSIS/PROPERTIES/PROPERTY[@ValuationUseType="Comparable"][2]/INSPECTIONS[1]/INSPECTION[1]/IMAGES[1]/IMAGE[2]/ImageFileLocationIdentifier[1]</UAD_Xpath>
+    </common>
+    <common>
+        <ACI_TagRedirector>IMAGE_FILE.6</ACI_TagRedirector>
+        <ACI_Tag>..\..\COMPARABLE_PHOTOS\COMP1\IMAGE_FILE_TYPE.6</ACI_Tag>
+        <ACI_TagName>Global Tech Inc.</ACI_TagName>
+        <ACI_TagIsImage>true</ACI_TagIsImage>
+        <ACI_ImageSource>d:ImageFileLocationIdentifier</ACI_ImageSource>
+        <UAD_Xpath>/MESSAGE/DOCUMENT_SETS/DOCUMENT_SET/DOCUMENTS/DOCUMENT/DEAL_SETS/DEAL_SET/DEALS/DEAL/SERVICES/SERVICE/VALUATION/VALUATION_RESPONSE/VALUATION_ANALYSES/VALUATION_ANALYSIS/PROPERTIES/PROPERTY[@ValuationUseType="Comparable"][3]/INSPECTIONS[1]/INSPECTION[1]/IMAGES[1]/IMAGE[1]/ImageFileLocationIdentifier[1]</UAD_Xpath>
+    </common>
+    <common>
+        <ACI_TagRedirector>IMAGE_FILE.6</ACI_TagRedirector>
+        <ACI_Tag>..\..\COMPARABLE_PHOTOS\COMP1\IMAGE_FILE_TYPE.6</ACI_Tag>
+        <ACI_TagName>Global Tech Inc.</ACI_TagName>
+        <ACI_TagIsImage>true</ACI_TagIsImage>
+        <ACI_ImageSource>d:ImageFileLocationIdentifier</ACI_ImageSource>
+        <UAD_Xpath>/MESSAGE/DOCUMENT_SETS/DOCUMENT_SET/DOCUMENTS/DOCUMENT/DEAL_SETS/DEAL_SET/DEALS/DEAL/SERVICES/SERVICE/VALUATION/VALUATION_RESPONSE/VALUATION_ANALYSES/VALUATION_ANALYSIS/PROPERTIES/PROPERTY[@ValuationUseType="Comparable"][3]/INSPECTIONS[1]/INSPECTION[1]/IMAGES[1]/IMAGE[2]/ImageFileLocationIdentifier[1]</UAD_Xpath>
+    </common>
+    <common>
+        <ACI_TagRedirector>IMAGE_FILE.6</ACI_TagRedirector>
+        <ACI_Tag>..\..\COMPARABLE_PHOTOS\COMP1\IMAGE_FILE_TYPE.6</ACI_Tag>
+        <ACI_TagName>Global Tech Inc.</ACI_TagName>
+        <ACI_TagIsImage>true</ACI_TagIsImage>
+        <ACI_ImageSource>d:ImageFileLocationIdentifier</ACI_ImageSource>
+        <UAD_Xpath>/MESSAGE/DOCUMENT_SETS/DOCUMENT_SET/DOCUMENTS/DOCUMENT/DEAL_SETS/DEAL_SET/DEALS/DEAL/SERVICES/SERVICE/VALUATION/VALUATION_RESPONSE/VALUATION_ANALYSES/VALUATION_ANALYSIS/PROPERTIES/PROPERTY[@ValuationUseType="Comparable"][3]/INSPECTIONS[1]/INSPECTION[1]/IMAGES[1]/IMAGE[3]/ImageFileLocationIdentifier[1]</UAD_Xpath>
+    </common>
+    <common>
+        <ACI_TagRedirector>IMAGE_FILE.13</ACI_TagRedirector>
+        <ACI_Tag>..\..\MARKET_DATA\CHARTS\IMAGE_FILE_TYPE.13</ACI_Tag>
+        <ACI_TagName>Global Tech Inc.</ACI_TagName>
+        <ACI_TagIsImage>true</ACI_TagIsImage>
+        <ACI_ImageSource>d:ImageFileLocationIdentifier</ACI_ImageSource>
+        <UAD_Xpath>/MESSAGE/DOCUMENT_SETS/DOCUMENT_SET/DOCUMENTS/DOCUMENT/DEAL_SETS/DEAL_SET/DEALS/DEAL/SERVICES/SERVICE/VALUATION/VALUATION_RESPONSE/VALUATION_ANALYSES/VALUATION_ANALYSIS/PROPERTIES/PROPERTY[@ValuationUseType="MarketAnalysis"][1]/INSPECTIONS[1]/INSPECTION[1]/IMAGES[1]/IMAGE[1]/ImageFileLocationIdentifier[1]</UAD_Xpath>
+    </common>
+    <common>
+        <ACI_TagRedirector>IMAGE_FILE.13</ACI_TagRedirector>
+        <ACI_Tag>..\..\MARKET_DATA\CHARTS\IMAGE_FILE_TYPE.13</ACI_Tag>
+        <ACI_TagName>Global Tech Inc.</ACI_TagName>
+        <ACI_TagIsImage>true</ACI_TagIsImage>
+        <ACI_ImageSource>d:ImageFileLocationIdentifier</ACI_ImageSource>
+        <UAD_Xpath>/MESSAGE/DOCUMENT_SETS/DOCUMENT_SET/DOCUMENTS/DOCUMENT/DEAL_SETS/DEAL_SET/DEALS/DEAL/SERVICES/SERVICE/VALUATION/VALUATION_RESPONSE/VALUATION_ANALYSES/VALUATION_ANALYSIS/PROPERTIES/PROPERTY[@ValuationUseType="MarketAnalysis"][1]/INSPECTIONS[1]/INSPECTION[1]/IMAGES[1]/IMAGE[2]/ImageFileLocationIdentifier[1]</UAD_Xpath>
+    </common>
+    <common>
+        <ACI_TagRedirector>IMAGE_FILE.1</ACI_TagRedirector>
+        <ACI_Tag>..\..\PROPERTY_PHOTOS\IMAGE_FILE_TYPE.1</ACI_Tag>
+        <ACI_TagName>Global Tech Inc.</ACI_TagName>
+        <ACI_TagIsImage>true</ACI_TagIsImage>
+        <ACI_ImageSource>d:ImageFileLocationIdentifier</ACI_ImageSource>
+        <UAD_Xpath>/MESSAGE/DOCUMENT_SETS/DOCUMENT_SET/DOCUMENTS/DOCUMENT/DEAL_SETS/DEAL_SET/DEALS/DEAL/SERVICES/SERVICE/VALUATION/VALUATION_RESPONSE/VALUATION_ANALYSES/VALUATION_ANALYSIS/PROPERTIES/PROPERTY[@ValuationUseType="SubjectProperty"][3]/INSPECTIONS[1]/INSPECTION[1]/IMAGES[1]/IMAGE[1]/ImageFileLocationIdentifier[1]</UAD_Xpath>
+    </common>
+</ImageMappings>

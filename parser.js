@@ -110,7 +110,7 @@ function main() {
         // IGNORE OPTIONS
         // Leaf nodes to completely ignore during traversal
         ignoreLeafNodes: [
-            'ImageFileLocationIdentifier',
+            // 'ImageFileLocationIdentifier',
             // Add more leaf nodes to ignore as needed
         ]
     };

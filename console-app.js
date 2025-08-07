@@ -122,7 +122,10 @@ async function main() {
     'VALUATION_ANALYSES', 'VALUATION_ANALYSIS',
     'PROPERTIES'
   ] ,           // Exceptions to force rule
-        ignoreLeafNodes: ['ImageFileLocationIdentifier']  // Leaf nodes to ignore
+        ignoreLeafNodes: [
+            //'ImageFileLocationIdentifier'
+
+        ]  // Leaf nodes to ignore
     };
     
     const inputPrompt = `Enter the path to your input XML file (default: ${defaults.inputFile}): `;
