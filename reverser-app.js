@@ -1,19 +1,25 @@
-const fs = require('fs');
-const path = require('path');
-const readline = require('readline');
+const fs = require("fs");
+const path = require("path");
+const readline = require("readline");
 
 function escapeXml(unsafe) {
-    if (typeof unsafe !== 'string') return unsafe;
-    return unsafe.replace(/[<>&'"]/g, function (c) {
-        switch (c) {
-            case '<': return '&lt;';
-            case '>': return '&gt;';
-            case '&': return '&amp;';
-            case '\'': return '&apos;';
-            case '"': return '&quot;';
-            default: return c;
-        }
-    });
+  if (typeof unsafe !== "string") return unsafe;
+  return unsafe.replace(/[<>&'"]/g, function (c) {
+    switch (c) {
+      case "<":
+        return "&lt;";
+      case ">":
+        return "&gt;";
+      case "&":
+        return "&amp;";
+      case "'":
+        return "&apos;";
+      case '"':
+        return "&quot;";
+      default:
+        return c;
+    }
+  });
 }
 
 /**
@@ -24,41 +30,47 @@ function escapeXml(unsafe) {
  * @returns {string|null} The formatted <common> XML block as a string, or null to skip.
  */
 function createCommonBlock(aciValue, uadXpath) {
-    // First, handle the special 'true'/'false' case. This rule takes precedence.
-    if (aciValue === 'true' || aciValue === 'false') {
-//         return `  <common>
-//     <UAD_Xpath>${escapeXml(uadXpath)}</UAD_Xpath>
-//   </common>`;
-return null;
-    }
+  if (typeof aciValue !== "string" || typeof uadXpath !== "string") return null;
 
-      // --- NEW LOGIC: Skip lines where UAD xpath ends with ImageFileLocationIdentifier ---
-    const xpathParts = uadXpath.split('/').filter(part => part.trim() !== '');
-    const lastXpathSegment = xpathParts[xpathParts.length - 1];
-    if (lastXpathSegment === 'ImageFileLocationIdentifier') {
-        return null;
-    }
+  const aci = aciValue.trim();
+  const xpath = uadXpath.trim();
 
+  // First, handle the special 'true'/'false' case. This rule takes precedence.
+  if (aci === "true" || aci === "false") {
+    return null;
+  }
 
-    // --- NEW LOGIC: Skip the line if it doesn't start with "URAR" or "USER" ---
-    if (!aciValue.startsWith('URAR') && !aciValue.startsWith('USER')) {
-        // Return null to signify that this line should be skipped.
-        return null;
-    }
-    
+  // --- NEW LOGIC: Skip lines where UAD xpath ends with ImageFileLocationIdentifier ---
+  const xpathParts = uadXpath.split("/").filter((part) => part.trim() !== "");
+  const lastXpathSegment = xpathParts[xpathParts.length - 1];
 
-    // --- EXISTING LOGIC: Runs only for lines that start with "URAR" ---
-    const uadXpathTag = uadXpath;
-    const aciTag = aciValue;
+  // build a lowercase set once for fast membership checks
+  const skipSet = new Set(
+    SKIP_LAST_XPATH_SEGMENTS.map((s) => String(s).toLowerCase())
+  );
 
-    const aciParts = aciTag.split('\\');
-    const aciTagName = aciParts[aciParts.length - 1];
-    
-    const pathParts = aciParts.slice(0, -1);
-    const aciTagPath = `\\${pathParts.join('\\')}\\`;
-    const aciTagIsCheckbox = 'false';
+  if (skipSet.has(lastXpathSegment.toLowerCase())) {
+    return null;
+  }
 
-    return `  <common>
+  // --- NEW LOGIC: Skip the line if it doesn't start with "URAR" or "USER" ---
+  if (!aciValue.startsWith("URAR") && !aciValue.startsWith("USER")) {
+    // Return null to signify that this line should be skipped.
+    return null;
+  }
+
+  // --- EXISTING LOGIC: Runs only for lines that start with "URAR" ---
+  const uadXpathTag = uadXpath;
+  const aciTag = aciValue;
+
+  const aciParts = aciTag.split("\\");
+  const aciTagName = aciParts[aciParts.length - 1];
+
+  const pathParts = aciParts.slice(0, -1);
+  const aciTagPath = `\\${pathParts.join("\\")}\\`;
+  const aciTagIsCheckbox = "false";
+
+  return `  <common>
     <ACI_TagPath>${escapeXml(aciTagPath)}</ACI_TagPath>
     <ACI_TagName>${escapeXml(aciTagName)}</ACI_TagName>
     <ACI_Tag>${escapeXml(aciTag)}</ACI_Tag>
@@ -67,72 +79,79 @@ return null;
   </common>`;
 }
 
-
 // --- Interactive Console Logic (with a small change in the loop) ---
 
 const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
 });
 
 function askQuestion(query) {
-    return new Promise(resolve => rl.question(query, resolve));
+  return new Promise((resolve) => rl.question(query, resolve));
 }
 
 async function main() {
-    console.log("--- Welcome to the XML Reverser App ---");
-    const inputFilename = await askQuestion('Enter the path to your input .txt file: ');
-    const inputPath = path.resolve(inputFilename);
-    if (!fs.existsSync(inputPath)) {
-        console.error(`✖ Error: Input file not found at ${inputPath}`);
-        rl.close();
-        return;
-    }
-    const defaultOutput = 'output/mapping.xml';
-    const outputPath = await askQuestion(`Enter the path for your new output XML file (default: ${defaultOutput}): `) || defaultOutput;
-    try {
-        console.log("\nReading input file and processing...");
-        const fileContent = fs.readFileSync(inputPath, 'utf8');
-        const lines = fileContent.split('\n').filter(line => line.trim() !== '');
-        const commonBlocks = [];
-        let skippedCount = 0;
-        
-        for (const line of lines) {
-            const parts = line.split(' : ');
-            if (parts.length === 2) {
-                const aciValue = parts[0].trim();
-                const uadXpath = parts[1].trim();
-                
-                // --- MODIFIED LOGIC: Check the result before adding it ---
-                const block = createCommonBlock(aciValue, uadXpath);
-                if (block) {
-                    // Only add the block to the array if it's not null.
-                    commonBlocks.push(block);
-                } else {
-                    skippedCount++;
-                }
+  console.log("--- Welcome to the XML Reverser App ---");
+  const inputFilename = await askQuestion(
+    "Enter the path to your input .txt file: "
+  );
+  const inputPath = path.resolve(inputFilename);
+  if (!fs.existsSync(inputPath)) {
+    console.error(`✖ Error: Input file not found at ${inputPath}`);
+    rl.close();
+    return;
+  }
+  const defaultOutput = "output/mapping.xml";
+  const outputPath =
+    (await askQuestion(
+      `Enter the path for your new output XML file (default: ${defaultOutput}): `
+    )) || defaultOutput;
+  try {
+    console.log("\nReading input file and processing...");
+    const fileContent = fs.readFileSync(inputPath, "utf8");
+    const lines = fileContent.split("\n").filter((line) => line.trim() !== "");
+    const commonBlocks = [];
+    let skippedCount = 0;
 
-            } else {
-                console.warn(`Skipping malformed line: ${line}`);
-            }
+    for (const line of lines) {
+      const parts = line.split(" : ");
+      if (parts.length === 2) {
+        const aciValue = parts[0].trim();
+        const uadXpath = parts[1].trim();
+
+        // --- MODIFIED LOGIC: Check the result before adding it ---
+        const block = createCommonBlock(aciValue, uadXpath);
+        if (block) {
+          // Only add the block to the array if it's not null.
+          commonBlocks.push(block);
+        } else {
+          skippedCount++;
         }
-        
-        const finalXml = `<MappingData>\n${commonBlocks.join('\n')}\n</MappingData>`;
-        const outputDir = path.dirname(outputPath);
-        if (!fs.existsSync(outputDir)) {
-            fs.mkdirSync(outputDir, { recursive: true });
-        }
-        fs.writeFileSync(outputPath, finalXml, 'utf8');
-        console.log(`\n✔ Success! Generated ${commonBlocks.length} records.`);
-        if (skippedCount > 0) {
-            console.log(`(Skipped ${skippedCount} records that did not start with 'URAR'.)`);
-        }
-        console.log(`Output written to: ${outputPath}`);
-    } catch (error) {
-        console.error(`\n✖ An error occurred during processing: ${error.message}`);
-    } finally {
-        rl.close();
+      } else {
+        console.warn(`Skipping malformed line: ${line}`);
+      }
     }
+
+    const finalXml = `<MappingData>\n${commonBlocks.join(
+      "\n"
+    )}\n</MappingData>`;
+    const outputDir = path.dirname(outputPath);
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
+    fs.writeFileSync(outputPath, finalXml, "utf8");
+    console.log(`\n✔ Success! Generated ${commonBlocks.length} records.`);
+    if (skippedCount > 0) {
+      console.log(
+        `(Skipped ${skippedCount} records that did not start with 'URAR'.)`
+      );
+    }
+    console.log(`Output written to: ${outputPath}`);
+  } catch (error) {
+    console.error(`\n✖ An error occurred during processing: ${error.message}`);
+  } finally {
+    rl.close();
+  }
 }
 
 main();

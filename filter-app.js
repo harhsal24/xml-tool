@@ -1,188 +1,184 @@
+// compare_xpaths.js
+// Usage: node compare_xpaths.js fileA.txt fileB.txt
+
 const fs = require('fs');
 const path = require('path');
-const readline = require('readline');
-const { DOMParser, XMLSerializer } = require('@xmldom/xmldom');
 
-// Helper function to escape XML characters
-function escapeXml(unsafe) {
-    if (typeof unsafe !== 'string') return unsafe;
-    return unsafe.replace(/[<>&'"]/g, function (c) {
-        switch (c) {
-            case '<': return '&lt;';
-            case '>': return '&gt;';
-            case '&': return '&amp;';
-            case '\'': return '&apos;';
-            case '"': return '&quot;';
-            default: return c;
-        }
-    });
+function readLines(filePath) {
+  return fs.readFileSync(filePath, 'utf8')
+    .split(/\r?\n/)
+    .map(l => l.trim())
+    .filter(l => l.length > 0 && !l.startsWith('#'));
 }
 
-// Function to parse the text file and extract XPaths
-function parseTextFile(filePath) {
-    const content = fs.readFileSync(filePath, 'utf8');
-    const lines = content.split('\n').filter(line => line.trim() !== '');
-    const xpaths = new Set();
-    
-    lines.forEach(line => {
-        const parts = line.split(' : ');
-        if (parts.length === 2) {
-            const xpath = parts[1].trim();
-            xpaths.add(xpath);
-        }
-    });
-    
-    return xpaths;
-}
+/**
+ * Parse lines and return Map(xpath -> Set(values))
+ * Supports "value : /xpath", "/xpath", or "prefix /xpath".
+ */
+function parseFileToMap(filePath) {
+  const lines = readLines(filePath);
+  const map = new Map();
 
-// Function to parse XML and filter common blocks
-function filterCommonBlocks(xmlPath, xpathSet) {
-    const xmlContent = fs.readFileSync(xmlPath, 'utf8');
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(xmlContent, 'application/xml');
-    
-    const errorNode = doc.getElementsByTagName('parsererror');
-    if (errorNode.length > 0) {
-        throw new Error('XML Parsing Error: ' + new XMLSerializer().serializeToString(errorNode[0]));
+  for (const line of lines) {
+    // try exact "value : /xpath" with last colon-style split
+    let m = line.match(/^(.*?)\s*:\s*(\/.+)$/);
+    let value, xpath;
+
+    if (m) {
+      value = m[1].trim();
+      xpath = m[2].trim();
+    } else {
+      // fallback: find first slash and consider the rest as xpath
+      const idx = line.indexOf('/');
+      if (idx !== -1) {
+        xpath = line.slice(idx).trim();
+        value = line.slice(0, idx).replace(/[:\s]+$/, '').trim();
+      } else {
+        // can't find an xpath — skip
+        continue;
+      }
     }
-    
-    const commonBlocks = doc.getElementsByTagName('common');
-    const filteredBlocks = [];
-    let matchedCount = 0;
-    
-    for (let i = 0; i < commonBlocks.length; i++) {
-        const block = commonBlocks[i];
-        const uadXpathNodes = block.getElementsByTagName('UAD_Xpath');
-        
-        if (uadXpathNodes.length > 0) {
-            const uadXpathValue = uadXpathNodes[0].textContent;
-            
-            // Check if this XPath is in our set
-            if (xpathSet.has(uadXpathValue)) {
-                // Serialize the entire common block
-                const serializer = new XMLSerializer();
-                const blockXml = serializer.serializeToString(block);
-                filteredBlocks.push(blockXml);
-                matchedCount++;
-            }
-        }
+
+    if (!xpath) continue;
+    // normalize whitespace in xpath to single spaces and trim
+    xpath = xpath.replace(/\s+/g, ' ').trim();
+
+    const existing = map.get(xpath);
+    if (!existing) {
+      map.set(xpath, new Set(value ? [value] : []));
+    } else {
+      if (value) existing.add(value);
     }
-    
-    return { filteredBlocks, matchedCount, totalBlocks: commonBlocks.length };
+  }
+
+  return map;
 }
 
-// Function to create the output XML
-function createOutputXml(filteredBlocks) {
-    // Format the blocks with proper indentation
-    const formattedBlocks = filteredBlocks.map(block => {
-        // Add proper indentation to the block
-        return '  ' + block.replace(/\n/g, '\n  ');
-    });
-    
-    return `<MappingData>\n${formattedBlocks.join('\n')}\n</MappingData>`;
+function setToSortedArray(set) {
+  return Array.from(set).sort();
 }
 
-// Interactive console interface
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-
-function askQuestion(query) {
-    return new Promise(resolve => rl.question(query, resolve));
+function setsEqual(a, b) {
+  if (a.size !== b.size) return false;
+  for (const v of a) if (!b.has(v)) return false;
+  return true;
 }
 
-async function main() {
-    console.log("--- XML Common Block Filter ---");
-    console.log("This tool filters common blocks from an XML file based on XPaths in a text file.\n");
-    
-    try {
-        // Get text file path
-        const textFilePath = await askQuestion('Enter the path to your text file with XPath mappings: ');
-        const resolvedTextPath = path.resolve(textFilePath);
-        
-        if (!fs.existsSync(resolvedTextPath)) {
-            console.error(`✖ Error: Text file not found at ${resolvedTextPath}`);
-            rl.close();
-            return;
-        }
-        
-        // Get XML file path
-        const xmlFilePath = await askQuestion('Enter the path to your XML file with common blocks: ');
-        const resolvedXmlPath = path.resolve(xmlFilePath);
-        
-        if (!fs.existsSync(resolvedXmlPath)) {
-            console.error(`✖ Error: XML file not found at ${resolvedXmlPath}`);
-            rl.close();
-            return;
-        }
-        
-        // Get output file path
-        const defaultOutput = 'output/filtered_mapping.xml';
-        const outputPath = await askQuestion(`Enter the path for the filtered output XML file (default: ${defaultOutput}): `) || defaultOutput;
-        
-        console.log("\nProcessing files...");
-        
-        // Parse text file to get XPaths
-        const xpathSet = parseTextFile(resolvedTextPath);
-        console.log(`Found ${xpathSet.size} unique XPaths in text file.`);
-        
-        // Filter common blocks
-        const { filteredBlocks, matchedCount, totalBlocks } = filterCommonBlocks(resolvedXmlPath, xpathSet);
-        
-        // Create output XML
-        const outputXml = createOutputXml(filteredBlocks);
-        
-        // Ensure output directory exists
-        const outputDir = path.dirname(outputPath);
-        if (!fs.existsSync(outputDir)) {
-            fs.mkdirSync(outputDir, { recursive: true });
-        }
-        
-        // Write output file
-        fs.writeFileSync(outputPath, outputXml, 'utf8');
-        
-        console.log(`\n✔ Success!`);
-        console.log(`   Total common blocks in XML: ${totalBlocks}`);
-        console.log(`   Matched blocks: ${matchedCount}`);
-        console.log(`   Output written to: ${outputPath}`);
-        
-        // Show unmatched XPaths if any
-        if (matchedCount < xpathSet.size) {
-            console.log(`\n⚠ Warning: ${xpathSet.size - matchedCount} XPaths from the text file had no matching blocks.`);
-            const showUnmatched = await askQuestion('Would you like to see the unmatched XPaths? (y/n): ');
-            
-            if (showUnmatched.toLowerCase() === 'y') {
-                // Re-read XML to find which XPaths were matched
-                const xmlContent = fs.readFileSync(resolvedXmlPath, 'utf8');
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(xmlContent, 'application/xml');
-                const commonBlocks = doc.getElementsByTagName('common');
-                const matchedXpaths = new Set();
-                
-                for (let i = 0; i < commonBlocks.length; i++) {
-                    const block = commonBlocks[i];
-                    const uadXpathNodes = block.getElementsByTagName('UAD_Xpath');
-                    if (uadXpathNodes.length > 0) {
-                        matchedXpaths.add(uadXpathNodes[0].textContent);
-                    }
-                }
-                
-                console.log("\nUnmatched XPaths from text file:");
-                xpathSet.forEach(xpath => {
-                    if (!matchedXpaths.has(xpath)) {
-                        console.log(`  - ${xpath}`);
-                    }
-                });
-            }
-        }
-        
-    } catch (error) {
-        console.error(`\n✖ An error occurred: ${error.message}`);
-    } finally {
-        rl.close();
+function writeLines(filePath, lines) {
+  fs.writeFileSync(filePath, lines.join('\n'), 'utf8');
+}
+
+function buildLinesFromMap(map) {
+  // returns array of "value :: xpath" lines; if multiple values for xpath, they are joined by " | "
+  const out = [];
+  const keys = Array.from(map.keys()).sort();
+  for (const k of keys) {
+    const vals = setToSortedArray(map.get(k));
+    const valStr = vals.length ? vals.join(' | ') : '';
+    out.push(valStr ? `${valStr} : ${k}` : `${k}`);
+  }
+  return out;
+}
+
+// --- Main ---
+(function main() {
+  const argv = process.argv.slice(2);
+  if (argv.length < 2) {
+    console.error('Usage: node compare_xpaths.js fileA.txt fileB.txt');
+    process.exit(2);
+  }
+
+  const fileA = path.resolve(argv[0]);
+  const fileB = path.resolve(argv[1]);
+
+  if (!fs.existsSync(fileA)) { console.error('File A not found:', fileA); process.exit(1); }
+  if (!fs.existsSync(fileB)) { console.error('File B not found:', fileB); process.exit(1); }
+
+  const mapA = parseFileToMap(fileA);
+  const mapB = parseFileToMap(fileB);
+
+  const xpathsA = new Set(mapA.keys());
+  const xpathsB = new Set(mapB.keys());
+
+  const matched = [];
+  const onlyA = [];
+  const onlyB = [];
+  const differing = [];
+  const identical = [];
+
+  for (const xp of xpathsA) {
+    if (xpathsB.has(xp)) {
+      matched.push(xp);
+      const valsA = mapA.get(xp) || new Set();
+      const valsB = mapB.get(xp) || new Set();
+      if (!setsEqual(valsA, valsB)) {
+        differing.push(xp);
+      } else {
+        identical.push(xp);
+      }
+    } else {
+      onlyA.push(xp);
     }
-}
+  }
 
-// Run the application
-main();
+  for (const xp of xpathsB) {
+    if (!xpathsA.has(xp)) onlyB.push(xp);
+  }
+
+  // prepare output directory = directory of fileA (if both in different dirs we pick fileA's dir)
+  const outDir = path.dirname(fileA);
+
+  // matched.txt: include values from both sides
+  const matchedLines = matched.sort().map(xp => {
+    const aVals = setToSortedArray(mapA.get(xp) || new Set()).join(' | ');
+    const bVals = setToSortedArray(mapB.get(xp) || new Set()).join(' | ');
+    return `${xp}  <-- A: ${aVals || '(empty)'}  |  B: ${bVals || '(empty)'}`;
+  });
+
+  writeLines(path.join(outDir, 'matched.txt'), matchedLines);
+
+  // only_in_A.txt and only_in_B.txt (with values)
+  writeLines(path.join(outDir, 'only_in_A.txt'), onlyA.length ? onlyA.sort().map(xp => {
+    const vals = setToSortedArray(mapA.get(xp) || new Set()).join(' | ');
+    return vals ? `${vals} : ${xp}` : `${xp}`;
+  }) : ['(none)']);
+
+  writeLines(path.join(outDir, 'only_in_B.txt'), onlyB.length ? onlyB.sort().map(xp => {
+    const vals = setToSortedArray(mapB.get(xp) || new Set()).join(' | ');
+    return vals ? `${vals} : ${xp}` : `${xp}`;
+  }) : ['(none)']);
+
+  // differing_values.txt: only xpaths present in both but values differ, show both sides
+  writeLines(path.join(outDir, 'differing_values.txt'), differing.length ? differing.sort().map(xp => {
+    const aVals = setToSortedArray(mapA.get(xp) || new Set()).join(' | ');
+    const bVals = setToSortedArray(mapB.get(xp) || new Set()).join(' | ');
+    return `${xp}\n  A: ${aVals || '(empty)'}\n  B: ${bVals || '(empty)'}\n`;
+  }) : ['(none)']);
+
+  // also write a summary file
+  const summary = {
+    fileA: fileA,
+    fileB: fileB,
+    totalXPathsA: xpathsA.size,
+    totalXPathsB: xpathsB.size,
+    matchedCount: matched.length,
+    identicalValuesCount: identical.length,
+    differingValuesCount: differing.length,
+    onlyInACount: onlyA.length,
+    onlyInBCount: onlyB.length,
+    outputs: {
+      matched: path.join(outDir, 'matched.txt'),
+      only_in_A: path.join(outDir, 'only_in_A.txt'),
+      only_in_B: path.join(outDir, 'only_in_B.txt'),
+      differing_values: path.join(outDir, 'differing_values.txt')
+    }
+  };
+  writeLines(path.join(outDir, 'summary.json'), [JSON.stringify(summary, null, 2)]);
+
+  // console summary
+  console.log('Comparison finished.');
+  console.log(`A: ${summary.totalXPathsA} xpaths  |  B: ${summary.totalXPathsB} xpaths`);
+  console.log(`Matched: ${summary.matchedCount} (identical values: ${summary.identicalValuesCount}, differing: ${summary.differingValuesCount})`);
+  console.log(`Only in A: ${summary.onlyInACount}   Only in B: ${summary.onlyInBCount}`);
+  console.log('Outputs written to:', outDir);
+})();
