@@ -2,6 +2,10 @@ const fs = require("fs");
 const path = require("path");
 const readline = require("readline");
 
+const SKIP_LAST_XPATH_SEGMENTS = [
+  'ImageFileLocationIdentifier',
+];
+
 function escapeXml(unsafe) {
   if (typeof unsafe !== "string") return unsafe;
   return unsafe.replace(/[<>&'"]/g, function (c) {
