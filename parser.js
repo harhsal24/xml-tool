@@ -30,6 +30,12 @@ function formatXPathLiteral(value) {
   return `concat(${concatParts.join(',')})`;
 }
 
+/** strip namespace prefix if present, e.g. d:PROPERTY -> PROPERTY */
+function stripPrefix(tagName) {
+  const idx = tagName.indexOf(':');
+  return idx === -1 ? tagName : tagName.substring(idx + 1);
+}
+
 /**
  * Build the xpath step for a node using configured attributes and parent-scope indexing rules.
  * - node: DOM element
@@ -40,6 +46,9 @@ function makeXPathStep(node, parent, options) {
   // tag name preserves namespace prefix if present (e.g. d:PROPERTY)
   const tag = node.tagName;
   const attrsToUse = Array.isArray(options.attributesToIncludeInPath) ? options.attributesToIncludeInPath : [];
+
+  // detect leaf status here for leaf-node-specific rules
+  const isLeaf = !Array.from(node.childNodes).some(n => n.nodeType === 1);
 
   // 1) build attribute predicates in specified order
   const attrPredicates = [];
@@ -54,9 +63,11 @@ function makeXPathStep(node, parent, options) {
 
   // 2) compute whether numeric index is required in parent scope
   let numericIndex = null;
+  // keep siblingsSameTag in scope so leaf-node policies can use it
+  let siblingsSameTag = [];
   if (parent) {
     const parentChildren = Array.from(parent.childNodes).filter(n => n.nodeType === 1);
-    const siblingsSameTag = parentChildren.filter(c => c.tagName === tag);
+    siblingsSameTag = parentChildren.filter(c => c.tagName === tag);
 
     if (siblingsSameTag.length > 1) {
       if (attrPredicates.length === 0) {
@@ -68,7 +79,7 @@ function makeXPathStep(node, parent, options) {
           return attrsToUse.every(a => {
             const sa = (s.getAttribute && s.getAttribute(a) !== null) ? String(s.getAttribute(a)) : undefined;
             const na = (node.getAttribute && node.getAttribute(a) !== null) ? String(node.getAttribute(a)) : undefined;
-            // treat undefined and '' distinctly? here we require exact match
+            // require exact match
             return sa === na;
           });
         });
@@ -82,19 +93,44 @@ function makeXPathStep(node, parent, options) {
         }
       }
     } else {
-      // only one sibling with same tag under parent -> no numeric index required
+      // only one sibling with same tag under parent -> no numeric index required (may be forced later)
       numericIndex = null;
     }
   }
 
-  // 3) determine whether to force [1] when numericIndex === 1
+  // 2b) apply leaf-node indexing policy (option: 'auto'|'always'|'never')
+  const leafPolicy = options.leafNodeIndexing || 'auto';
+  if (isLeaf) {
+    if (leafPolicy === 'never') {
+      // never include numeric index for leaf nodes
+      numericIndex = null;
+    } else if (leafPolicy === 'always') {
+      // always include numeric index for leaf nodes when parent exists.
+      // compute fallback index even if attributes would have made numericIndex null.
+      if (parent) {
+        // compute index among siblings with same tag (if none, fall back to 1)
+        const idx = siblingsSameTag && siblingsSameTag.length ? (siblingsSameTag.indexOf(node) + 1) : 1;
+        numericIndex = idx;
+        // respect exceptions to showing [1]
+        const isException = Array.isArray(options.exceptionsToIndexOneForcing) &&
+          (options.exceptionsToIndexOneForcing.includes(tag) || options.exceptionsToIndexOneForcing.includes(stripPrefix(tag)));
+        if (numericIndex === 1 && isException) {
+          numericIndex = null;
+        }
+      } else {
+        // root/parentless node: do not add numeric index
+        numericIndex = null;
+      }
+    }
+    // 'auto' => leave numericIndex as originally computed
+  }
+
+  // 3) determine whether to force [1] when numericIndex === null (existing behavior)
   let predicateStr = '';
   if (attrPredicates.length > 0) {
     predicateStr += `[${attrPredicates.join(' and ')}]`;
   }
   if (numericIndex !== null) {
-    // If numericIndex is e.g. 1 but options.forceIndexOneFor says not to show [1],
-    // we'll apply the force / exception logic below before appending.
     predicateStr += `[${numericIndex}]`;
   } else if (numericIndex === null) {
     // possible forced [1] when there was no numericIndex computed:
@@ -112,15 +148,7 @@ function makeXPathStep(node, parent, options) {
     }
   }
 
-  // special case: if numericIndex was computed as 1 but forceIndexOneFor is empty means show [1] (already added)
-  // ensure no duplicate [] sequences
   return `${tag}${predicateStr}`;
-}
-
-/** strip namespace prefix if present, e.g. d:PROPERTY -> PROPERTY */
-function stripPrefix(tagName) {
-  const idx = tagName.indexOf(':');
-  return idx === -1 ? tagName : tagName.substring(idx + 1);
 }
 
 /**
@@ -219,7 +247,13 @@ const defaultOptions = {
   // IGNORE leaf node tags (no output lines created for these tags)
   ignoreLeafNodes: [
     // 'ImageFileLocationIdentifier'
-  ]
+  ],
+
+  // NEW: control leaf-node indexing behavior:
+  // 'auto'   -> default behavior (index only when needed to disambiguate)
+  // 'always' -> always include numeric index for leaf nodes (respects exceptionsToIndexOneForcing)
+  // 'never'  -> never include numeric index for leaf nodes (even if needed)
+  leafNodeIndexing: 'auto'
 };
 
 // ----------------- Main CLI flow -----------------
@@ -246,7 +280,8 @@ function main() {
       forceIndexOneFor: Array.isArray(defaultOptions.forceIndexOneFor) ? defaultOptions.forceIndexOneFor.slice() : [],
       exceptionsToIndexOneForcing: Array.isArray(defaultOptions.exceptionsToIndexOneForcing) ? defaultOptions.exceptionsToIndexOneForcing.slice() : [],
       attributesToIncludeInPath: Array.isArray(defaultOptions.attributesToIncludeInPath) ? defaultOptions.attributesToIncludeInPath.slice() : [],
-      ignoreLeafNodes: Array.isArray(defaultOptions.ignoreLeafNodes) ? defaultOptions.ignoreLeafNodes.slice() : []
+      ignoreLeafNodes: Array.isArray(defaultOptions.ignoreLeafNodes) ? defaultOptions.ignoreLeafNodes.slice() : [],
+      leafNodeIndexing: defaultOptions.leafNodeIndexing || 'auto'
     };
 
     if (!fs.existsSync(inputPath)) {
@@ -266,6 +301,7 @@ function main() {
     console.log(`Attributes used for predicates: ${options.attributesToIncludeInPath.join(', ')}`);
     console.log(`Force index [1] for: ${options.forceIndexOneFor.length === 0 ? 'ALL tags' : options.forceIndexOneFor.join(', ')}`);
     console.log(`Exceptions to force rule: ${options.exceptionsToIndexOneForcing.join(', ')}`);
+    console.log(`Leaf node indexing policy: ${options.leafNodeIndexing}`);
     if (options.ignoreLeafNodes.length) {
       console.log(`Ignored leaf nodes: ${options.ignoreLeafNodes.join(', ')}`);
     }
