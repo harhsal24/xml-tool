@@ -43,14 +43,13 @@ function stripPrefix(tagName) {
  * - options: config object
  */
 function makeXPathStep(node, parent, options) {
-  // tag name preserves namespace prefix if present (e.g. d:PROPERTY)
   const tag = node.tagName;
   const attrsToUse = Array.isArray(options.attributesToIncludeInPath) ? options.attributesToIncludeInPath : [];
 
-  // detect leaf status here for leaf-node-specific rules
+  // detect leaf status
   const isLeaf = !Array.from(node.childNodes).some(n => n.nodeType === 1);
 
-  // 1) build attribute predicates in specified order
+  // build attribute predicates
   const attrPredicates = [];
   for (const attrName of attrsToUse) {
     if (node.hasAttribute && node.hasAttribute(attrName)) {
@@ -61,9 +60,8 @@ function makeXPathStep(node, parent, options) {
     }
   }
 
-  // 2) compute whether numeric index is required in parent scope
+  // compute numeric index in parent scope (if needed)
   let numericIndex = null;
-  // keep siblingsSameTag in scope so leaf-node policies can use it
   let siblingsSameTag = [];
   if (parent) {
     const parentChildren = Array.from(parent.childNodes).filter(n => n.nodeType === 1);
@@ -71,78 +69,69 @@ function makeXPathStep(node, parent, options) {
 
     if (siblingsSameTag.length > 1) {
       if (attrPredicates.length === 0) {
-        // no attribute-based distinguishing: index among all siblings with same tag
         numericIndex = siblingsSameTag.indexOf(node) + 1;
       } else {
-        // attributes exist: see whether they uniquely identify this node among siblings with same tag
         const sameAttrSiblings = siblingsSameTag.filter(s => {
           return attrsToUse.every(a => {
             const sa = (s.getAttribute && s.getAttribute(a) !== null) ? String(s.getAttribute(a)) : undefined;
             const na = (node.getAttribute && node.getAttribute(a) !== null) ? String(node.getAttribute(a)) : undefined;
-            // require exact match
             return sa === na;
           });
         });
 
         if (sameAttrSiblings.length > 1) {
-          // attribute set does not uniquely identify this node -> index within that subset
           numericIndex = sameAttrSiblings.indexOf(node) + 1;
         } else {
-          // unique by attributes -> no numeric index required
           numericIndex = null;
         }
       }
     } else {
-      // only one sibling with same tag under parent -> no numeric index required (may be forced later)
       numericIndex = null;
     }
   }
 
-  // 2b) apply leaf-node indexing policy (option: 'auto'|'always'|'never')
+  // leaf-node policy: 'auto'|'always'|'never'
   const leafPolicy = options.leafNodeIndexing || 'auto';
   if (isLeaf) {
     if (leafPolicy === 'never') {
-      // never include numeric index for leaf nodes
       numericIndex = null;
     } else if (leafPolicy === 'always') {
-      // always include numeric index for leaf nodes when parent exists.
-      // compute fallback index even if attributes would have made numericIndex null.
       if (parent) {
-        // compute index among siblings with same tag (if none, fall back to 1)
-        const idx = siblingsSameTag && siblingsSameTag.length ? (siblingsSameTag.indexOf(node) + 1) : 1;
+        const idx = (siblingsSameTag && siblingsSameTag.length) ? (siblingsSameTag.indexOf(node) + 1) : 1;
         numericIndex = idx;
-        // respect exceptions to showing [1]
         const isException = Array.isArray(options.exceptionsToIndexOneForcing) &&
           (options.exceptionsToIndexOneForcing.includes(tag) || options.exceptionsToIndexOneForcing.includes(stripPrefix(tag)));
-        if (numericIndex === 1 && isException) {
-          numericIndex = null;
-        }
+        if (numericIndex === 1 && isException) numericIndex = null;
       } else {
-        // root/parentless node: do not add numeric index
         numericIndex = null;
       }
     }
-    // 'auto' => leave numericIndex as originally computed
+    // 'auto' => leave numericIndex as originally calculated
   }
 
-  // 3) determine whether to force [1] when numericIndex === null (existing behavior)
+  // build predicate string
   let predicateStr = '';
   if (attrPredicates.length > 0) {
     predicateStr += `[${attrPredicates.join(' and ')}]`;
   }
+
   if (numericIndex !== null) {
     predicateStr += `[${numericIndex}]`;
-  } else if (numericIndex === null) {
-    // possible forced [1] when there was no numericIndex computed:
-    // If forceIndexOneFor is an array and length === 0 => force for ALL tags
-    // Or if the tag is included explicitly in forceIndexOneFor
-    if (Array.isArray(options.forceIndexOneFor)) {
-      const forceForAll = options.forceIndexOneFor.length === 0;
-      const forceForSpecific = options.forceIndexOneFor.includes(tag) || options.forceIndexOneFor.includes(stripPrefix(tag));
+  } else {
+    // Apply global force-index rule for non-leaf nodes OR when leafPolicy === 'always'
+    const forceArr = Array.isArray(options.forceIndexOneFor) ? options.forceIndexOneFor : null;
+    if (forceArr) {
+      const forceForAll = forceArr.length === 0;
+      const forceForSpecific = forceForAll ? false : (forceArr.includes(tag) || forceArr.includes(stripPrefix(tag)));
+      const shouldForceThisTag = forceForAll || forceForSpecific;
+
       const isException = Array.isArray(options.exceptionsToIndexOneForcing) &&
                           (options.exceptionsToIndexOneForcing.includes(tag) || options.exceptionsToIndexOneForcing.includes(stripPrefix(tag)));
-      if ((forceForAll || forceForSpecific) && !isException) {
-        // show [1]
+
+      // New rule: if this is a leaf, only allow global force when leafPolicy === 'always'
+      const leafAllowsForce = !isLeaf || (isLeaf && leafPolicy === 'always');
+
+      if (shouldForceThisTag && !isException && leafAllowsForce) {
         predicateStr += `[1]`;
       }
     }
@@ -150,6 +139,8 @@ function makeXPathStep(node, parent, options) {
 
   return `${tag}${predicateStr}`;
 }
+
+
 
 /**
  * Build absolute XPath for current node using ancestor chain.
@@ -221,7 +212,7 @@ function generateXpathList(xmlString, options) {
 
 const defaultOptions = {
   // Default I/O paths (relative to this script folder)
-  inputFile: path.join(__dirname, 'input', 'sample.xml'),
+  inputFile: path.join(__dirname, 'input', 'sample-input.xml'),
   outputFile: path.join(__dirname, 'output', 'sample.txt'),
 
   // INDEXING: set [] to force index [1] for ALL tags
@@ -253,7 +244,7 @@ const defaultOptions = {
   // 'auto'   -> default behavior (index only when needed to disambiguate)
   // 'always' -> always include numeric index for leaf nodes (respects exceptionsToIndexOneForcing)
   // 'never'  -> never include numeric index for leaf nodes (even if needed)
-  leafNodeIndexing: 'auto'
+  leafNodeIndexing: 'never'
 };
 
 // ----------------- Main CLI flow -----------------
